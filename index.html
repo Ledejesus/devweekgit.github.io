@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="OpenVideo Studio: protótipo open source de text-to-video com roteiro, cenas, legendas, narração e exportação WebM no navegador."
+    />
+    <title>OpenVideo Studio — Text to Video</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero panel">
+        <div>
+          <p class="eyebrow">100% navegador • código aberto • exporta WebM</p>
+          <h1>Crie vídeos completos a partir de texto.</h1>
+          <p class="hero-copy">
+            Um estúdio estilo IA do CapCut para transformar uma ideia em roteiro,
+            cenas animadas, legendas, narração e arquivo de vídeo — sem backend obrigatório.
+          </p>
+        </div>
+        <div class="hero-card">
+          <span>Fluxo</span>
+          <strong>Prompt → Roteiro → Cenas → Legendas → Export</strong>
+          <small>
+            A geração visual é procedural/open source. Para modelos de IA reais, conecte
+            um backend com Stable Video Diffusion, AnimateDiff ou ModelScope.
+          </small>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="control-panel panel" aria-label="Controles do vídeo">
+          <label for="prompt">Descreva o vídeo</label>
+          <textarea id="prompt" rows="8">Faça um vídeo vertical de 30 segundos vendendo uma cafeteria artesanal em São Paulo, com energia moderna, close em café, chamada para visitar hoje e legenda chamativa.</textarea>
+
+          <div class="grid-two">
+            <label>
+              Formato
+              <select id="format">
+                <option value="vertical">Vertical 9:16</option>
+                <option value="square">Quadrado 1:1</option>
+                <option value="landscape">Horizontal 16:9</option>
+              </select>
+            </label>
+            <label>
+              Duração
+              <select id="duration">
+                <option value="15">15s</option>
+                <option value="30" selected>30s</option>
+                <option value="45">45s</option>
+                <option value="60">60s</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="grid-two">
+            <label>
+              Estilo
+              <select id="style">
+                <option value="cinematic">Cinemático</option>
+                <option value="social">Social Ads</option>
+                <option value="documentary">Documentário</option>
+                <option value="neon">Neon futurista</option>
+              </select>
+            </label>
+            <label>
+              Voz
+              <select id="voiceTone">
+                <option value="pt-BR">Português BR</option>
+                <option value="en-US">English US</option>
+                <option value="es-ES">Español</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="generateBtn" class="primary">Gerar vídeo</button>
+            <button id="playBtn">Reproduzir</button>
+            <button id="voiceBtn">Narrar</button>
+            <button id="exportBtn">Exportar WebM</button>
+          </div>
+
+          <p class="hint">
+            Dica: edite qualquer cena na timeline antes de exportar. O arquivo final é
+            gravado do canvas com a API MediaRecorder do navegador.
+          </p>
+        </aside>
+
+        <section class="preview-panel panel">
+          <div class="preview-toolbar">
+            <div>
+              <span class="eyebrow">Preview</span>
+              <h2 id="videoTitle">Cafeteria artesanal em São Paulo</h2>
+            </div>
+            <span id="statusBadge" class="status-badge">Pronto</span>
+          </div>
+
+          <div class="stage-wrap" id="stageWrap">
+            <canvas id="videoCanvas" width="720" height="1280" aria-label="Prévia do vídeo gerado"></canvas>
+          </div>
+
+          <div class="transport">
+            <progress id="progress" value="0" max="100"></progress>
+            <span id="timecode">00:00 / 00:30</span>
+          </div>
+        </section>
+      </section>
+
+      <section class="timeline-panel panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Timeline editável</p>
+            <h2>Cenas geradas</h2>
+          </div>
+          <button id="addSceneBtn">+ Cena</button>
+        </div>
+        <div id="timeline" class="timeline" aria-live="polite"></div>
+      </section>
+
+      <section class="oss-panel panel">
+        <div>
+          <p class="eyebrow">Open source stack</p>
+          <h2>Pronto para evoluir para IA generativa real</h2>
+          <p>
+            Este app já entrega roteiro, motion graphics, legendas, narração via Web Speech
+            e exportação local. Para gerar imagens/vídeos com modelos abertos, adicione um
+            backend Python com Diffusers e exponha um endpoint compatível com o adaptador
+            descrito no README.
+          </p>
+        </div>
+        <ul>
+          <li>Stable Video Diffusion para image-to-video.</li>
+          <li>AnimateDiff para text/image-to-video com difusão.</li>
+          <li>ModelScope text-to-video para prototipagem.</li>
+          <li>FFmpeg/ffmpeg.wasm para renderização avançada.</li>
+        </ul>
+      </section>
+    </main>
+
+    <template id="sceneTemplate">
+      <article class="scene-card">
+        <div class="scene-meta">
+          <strong class="scene-index"></strong>
+          <span class="scene-duration"></span>
+        </div>
+        <label>
+          Título da cena
+          <input class="scene-title" />
+        </label>
+        <label>
+          Legenda
+          <textarea class="scene-caption" rows="2"></textarea>
+        </label>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
